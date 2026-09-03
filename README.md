@@ -1,3 +1,13 @@
+<h1> Our login page! </h1>
+https://onco-care.base44.app
+
+<h2> Some demo accounts for you to use. </h2>
+&bull; Doctor's Email: hassanaliasif2008@gmail.com
+&bull; Doctor's Password: 
+
+&bull; Patient's Email: aliasifeme@gmail.com
+&bull; Patient's Password: 
+
 const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
 
 # Base44 Project

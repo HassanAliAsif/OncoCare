@@ -1,9 +1,7 @@
-const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-import { Search, Plus, Users } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { Search, Plus, Users, Edit } from "lucide-react";
 import { Image as UIImage } from "@/components/ui/image";
 import { getCategoryStyle } from "@/lib/cancerTypes";
 import { useTranslation } from "@/lib/i18n";
@@ -22,12 +20,13 @@ export default function Patients() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [editingPatient, setEditingPatient] = useState(null);
   const { t } = useTranslation();
 
   const load = async () => {
     setLoading(true);
     try {
-      const data = await db.entities.Patient.list("-created_date", 200);
+      const data = await base44.entities.Patient.list("-created_date", 200);
       setPatients(data);
     } catch (e) {
       // ignore
@@ -113,9 +112,23 @@ export default function Patients() {
                     </span>
                   )}
                 </div>
-                <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full shrink-0 ${statusStyles[p.status] || statusStyles.active}`}>
-                  {p.status?.replace(/_/g, " ") || "active"}
-                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${statusStyles[p.status] || statusStyles.active}`}>
+                    {p.status?.replace(/_/g, " ") || "active"}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setEditingPatient(p);
+                    }}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"
+                    aria-label={t("pd.edit")}
+                    title={t("pd.edit")}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
               <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
                 <div>
@@ -137,6 +150,17 @@ export default function Patients() {
           onClose={() => setShowForm(false)}
           onSaved={() => {
             setShowForm(false);
+            load();
+          }}
+        />
+      )}
+
+      {editingPatient && (
+        <PatientForm
+          patient={editingPatient}
+          onClose={() => setEditingPatient(null)}
+          onSaved={() => {
+            setEditingPatient(null);
             load();
           }}
         />

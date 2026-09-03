@@ -1,0 +1,28 @@
+export const LAB_PANELS = {
+  "Complete Blood Count (CBC)": [
+    { parameter: "Hemoglobin", unit: "g/dL", reference_range: "13.5-17.5 (M), 12.0-15.5 (F)" },
+    { parameter: "White Blood Cells", unit: "x10^9/L", reference_range: "4.0-11.0" },
+    { parameter: "Platelets", unit: "x10^9/L", reference_range: "150-400" },
+    { parameter: "Red Blood Cells", unit: "x10^12/L", reference_range: "4.5-5.9 (M), 4.1-5.1 (F)" },
+    { parameter: "Hematocrit", unit: "%", reference_range: "41-53 (M), 36-46 (F)" },
+    { parameter: "MCV", unit: "fL", reference_range: "80-100" },
+    { parameter: "MCH", unit: "pg", reference_range: "27-33" },
+    { parameter: "MCHC", unit: "g/dL", reference_range: "32-36" },
+    { parameter: "Neutrophils", unit: "%", reference_range: "45-75" },
+    { parameter: "Lymphocytes", unit: "%", reference_range: "20-40" },
+  ],
+  "Liver Function Test (LFT)": [
+    { parameter: "ALT (SGPT)", unit: "U/L", reference_range: "7-56" },
+    { parameter: "AST (SGOT)", unit: "U/L", reference_range: "10-40" },
+    { parameter: "Alkaline Phosphatase", unit: "U/L", reference_range: "44-147" },
+    { parameter: "Total Bilirubin", unit: "mg/dL", reference_range: "0.1-1.2" },
+    { parameter: "Direct Bilirubin", unit: "mg/dL", reference_range: "0.0-0.3" },
+    { parameter: "Albumin", unit: "g/dL", reference_range: "3.5-5.0" },
+    { parameter: "Total Protein", unit: "g/dL", reference_range: "6.0-8.3" },
+    { parameter: "GGT", unit: "U/L", reference_range: "8-61" },
+  ],
+  "Kidney Function Test (KFT)": [
+    { parameter: "Creatinine", unit: "mg/dL", reference_range: "0.6-1.3" },
+    { parameter: "Blood Urea Nitrogen", unit: "mg/dL", reference_range: "7-20" },
+    { parameter: "eGFR", unit: "mL/min/1.73m²", reference_range: ">90" },
+    { parameter: "Sodium", unit: "mmol/L", reference_range: "135-145" },

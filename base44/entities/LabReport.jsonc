@@ -1,0 +1,97 @@
+{
+  "name": "LabReport",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "title": "Patient ID"
+    },
+    "patient_name": {
+      "type": "string",
+      "title": "Patient Name"
+    },
+    "patient_email": {
+      "type": "string",
+      "format": "email",
+      "title": "Patient Email"
+    },
+    "test_name": {
+      "type": "string",
+      "title": "Test Name"
+    },
+    "report_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Report Date"
+    },
+    "ordering_physician": {
+      "type": "string",
+      "title": "Ordering Physician"
+    },
+    "lab_name": {
+      "type": "string",
+      "title": "Lab Facility"
+    },
+    "file_url": {
+      "type": "string",
+      "format": "uri",
+      "title": "Report File URL"
+    },
+    "results": {
+      "type": "string",
+      "title": "Results (JSON)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "reviewed"
+      ],
+      "default": "completed",
+      "title": "Status"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "title": "Reviewed By"
+    }
+  },
+  "required": [
+    "patient_id",
+    "test_name",
+    "report_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.patient_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "title": "Patient ID"
+    },
+    "patient_name": {
+      "type": "string",
+      "title": "Patient Name"
+    },
+    "patient_email": {
+      "type": "string",
+      "format": "email",
+      "title": "Patient Email"
+    },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "appointment_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Appointment Date & Time"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 30,
+      "title": "Duration (minutes)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "chemotherapy",
+        "consultation",
+        "follow_up",
+        "lab_test",
+        "imaging",
+        "other"
+      ],
+      "title": "Type"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "completed",
+        "cancelled",
+        "no_show"
+      ],
+      "default": "scheduled",
+      "title": "Status"
+    },
+    "created_by_name": {
+      "type": "string",
+      "title": "Created By"
+    }
+  },
+  "required": [
+    "patient_id",
+    "title",
+    "appointment_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.patient_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

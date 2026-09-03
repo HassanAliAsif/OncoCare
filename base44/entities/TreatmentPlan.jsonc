@@ -1,0 +1,28 @@
+{
+  "name": "TreatmentPlan",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "title": "Patient ID"
+    },
+    "patient_name": {
+      "type": "string",
+      "title": "Patient Name"
+    },
+    "patient_email": {
+      "type": "string",
+      "format": "email",
+      "title": "Patient Email"
+    },
+    "plan_name": {
+      "type": "string",
+      "title": "Plan Name"
+    },
+    "protocol": {
+      "type": "string",
+      "title": "Chemotherapy Protocol"
+    },
+    "cycles_total": {
+      "type": "number",
+      "title": "Total Cycles"

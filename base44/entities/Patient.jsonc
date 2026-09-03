@@ -1,0 +1,28 @@
+{
+  "name": "Patient",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "title": "Full Name"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "title": "Date of Birth"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "other"
+      ],
+      "title": "Gender"
+    },
+    "national_id": {
+      "type": "string",
+      "title": "National ID / Passport"
+    },
+    "phone": {
+      "type": "string",

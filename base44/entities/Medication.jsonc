@@ -1,0 +1,110 @@
+{
+  "name": "Medication",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "title": "Patient ID"
+    },
+    "patient_name": {
+      "type": "string",
+      "title": "Patient Name"
+    },
+    "patient_email": {
+      "type": "string",
+      "format": "email",
+      "title": "Patient Email"
+    },
+    "treatment_plan_id": {
+      "type": "string",
+      "title": "Treatment Plan ID"
+    },
+    "drug_name": {
+      "type": "string",
+      "title": "Drug Name"
+    },
+    "dosage": {
+      "type": "string",
+      "title": "Dosage"
+    },
+    "route": {
+      "type": "string",
+      "enum": [
+        "IV",
+        "Oral",
+        "Subcutaneous",
+        "Intramuscular",
+        "Topical",
+        "Other"
+      ],
+      "title": "Route"
+    },
+    "frequency": {
+      "type": "string",
+      "title": "Frequency"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Start Date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "End Date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "discontinued",
+        "on_hold"
+      ],
+      "default": "active",
+      "title": "Status"
+    },
+    "side_effects_observed": {
+      "type": "string",
+      "title": "Side Effects Observed"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "patient_id",
+    "drug_name",
+    "dosage"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.patient_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

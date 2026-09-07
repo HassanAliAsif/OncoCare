@@ -1,8 +1,6 @@
-const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
-
 import React, { useEffect, useState, useRef } from "react";
-
-import { Shield, Send, X, Loader2, Maximize2, Minimize2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { Shield, Send, X, Loader2, Maximize2, Minimize2, Languages } from "lucide-react";
 import MessageBubble from "@/components/agent/MessageBubble";
 import { useTranslation } from "@/lib/i18n";
 
@@ -11,9 +9,10 @@ const AGENT_NAME = "chemocare_assistant";
 const suggestedPromptKeys = ["agent.prompt1", "agent.prompt2", "agent.prompt3", "agent.prompt4"];
 
 export default function ShieldBotChat() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const suggestedPrompts = suggestedPromptKeys.map((k) => t(k));
   const [open, setOpen] = useState(false);
+  const [botLang, setBotLang] = useState(lang === "ur" ? "ur" : "en");
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -30,13 +29,13 @@ export default function ShieldBotChat() {
     (async () => {
       setLoading(true);
       try {
-        const existing = await db.agents.listConversations({ agent_name: AGENT_NAME });
+        const existing = await base44.agents.listConversations({ agent_name: AGENT_NAME });
         if (existing.length > 0) {
-          const conv = await db.agents.getConversation(existing[0].id);
+          const conv = await base44.agents.getConversation(existing[0].id);
           setConversation(conv);
           setMessages(conv.messages || []);
         } else {
-          const conv = await db.agents.createConversation({
+          const conv = await base44.agents.createConversation({
             agent_name: AGENT_NAME,
             metadata: { name: "ShieldBot", description: "Personalized chemotherapy support" },
           });
@@ -54,7 +53,7 @@ export default function ShieldBotChat() {
   // Subscribe to live conversation updates
   useEffect(() => {
     if (!conversation?.id) return;
-    const unsubscribe = db.agents.subscribeToConversation(conversation.id, (data) => {
+    const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
       setMessages(data.messages || []);
     });
     return () => unsubscribe();
@@ -72,8 +71,11 @@ export default function ShieldBotChat() {
     if (!content || !conversation || sending) return;
     setInput("");
     setSending(true);
+    const langInstruction = botLang === "ur"
+      ? "[براہ کرم اردو میں جواب دیں۔] "
+      : "[Please respond in English.] ";
     try {
-      await db.agents.addMessage(conversation, { role: "user", content });
+      await base44.agents.addMessage(conversation, { role: "user", content: langInstruction + content });
     } catch (e) {
       // ignore
     } finally {
@@ -113,6 +115,14 @@ export default function ShieldBotChat() {
               <p className="font-semibold text-slate-800 leading-tight">ShieldBot</p>
               <p className="text-xs text-slate-400 truncate">{t("agent.subtitle")}</p>
             </div>
+            <button
+              onClick={() => setBotLang((l) => (l === "ur" ? "en" : "ur"))}
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors ${botLang === "ur" ? "bg-teal-600 text-white" : "bg-white text-teal-700 border border-teal-200"}`}
+              title={botLang === "ur" ? "Switch to English" : "اردو پر منتقل کریں"}
+            >
+              <Languages className="w-3.5 h-3.5" />
+              {botLang === "ur" ? "اردو" : "EN"}
+            </button>
             <button onClick={() => setExpanded((e) => !e)} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white transition-colors" aria-label="Toggle size">
               {expanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
